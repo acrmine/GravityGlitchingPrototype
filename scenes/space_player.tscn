@@ -1,0 +1,71 @@
+[gd_scene load_steps=11 format=3 uid="uid://q3w22mowpnt"]
+
+[ext_resource type="Texture2D" uid="uid://b233cj5quc0il" path="res://assets/character/Spaceman_Idle-Sheet.png" id="1_cp1vw"]
+[ext_resource type="Script" uid="uid://c80lhs3vfj3rc" path="res://scripts/space_player.gd" id="1_q1du6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q1du6"]
+atlas = ExtResource("1_cp1vw")
+region = Rect2(0, 0, 48, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ngarl"]
+atlas = ExtResource("1_cp1vw")
+region = Rect2(48, 0, 48, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_opy1n"]
+atlas = ExtResource("1_cp1vw")
+region = Rect2(96, 0, 48, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_umfja"]
+atlas = ExtResource("1_cp1vw")
+region = Rect2(144, 0, 48, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hwf6r"]
+atlas = ExtResource("1_cp1vw")
+region = Rect2(192, 0, 48, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_osv2l"]
+atlas = ExtResource("1_cp1vw")
+region = Rect2(240, 0, 48, 44)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_h6gyn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q1du6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ngarl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_opy1n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_umfja")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hwf6r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_osv2l")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cp1vw"]
+radius = 7.0
+height = 42.0
+
+[node name="SpacePlayer" type="CharacterBody2D"]
+script = ExtResource("1_q1du6")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_h6gyn")
+animation = &"idle"
+autoplay = "idle"
+frame_progress = 0.507905
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1)
+shape = SubResource("CapsuleShape2D_cp1vw")
