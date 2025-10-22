@@ -14,7 +14,7 @@ var GravOrientation = { GravityDirection.DOWN: 0, GravityDirection.RIGHT: -90,
 						GravityDirection.LEFT: 90, GravityDirection.UP: 180}
 
 var in_air: bool = false
-var PlayerGravity = GravityDirection.DOWN
+var PlayerGravity = GravityDirection.UP
 
 func _physics_process(delta: float) -> void:
 	# Get input direction: -1, 0, 1 (-1 when left, 1 when right)

@@ -15,6 +15,10 @@ run/main_scene="uid://dyop550uv56rb"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
+[dotnet]
+
+project/assembly_name="GravityGlitchingPrototype"
+
 [input]
 
 move_left={
