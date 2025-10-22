@@ -13,7 +13,6 @@ const ROTATION_SPEED = 10.0
 
 var in_air: bool = false
 var in_air_animation: bool = false
-var grav_direction = -up_direction
 
 func _physics_process(delta: float) -> void:
 	# :DEBUG: change gravity with j/l or k to flip, will be hooked to random timer later
@@ -48,7 +47,7 @@ func _physics_process(delta: float) -> void:
 
 	# Horizontal Movement
 	var ground = is_on_floor() || (in_air && in_air_animation)
-	if down_direction.y:
+	if down_direction.y > 0.000001 || down_direction.y < -0.000001:
 		velocity.x = move_toward(velocity.x, right_direction.x * direction * MAX_SPEED, ACCELERATION if ground else AIR_ACCELERATION)
 	else:
 		velocity.y = move_toward(velocity.y, right_direction.y * direction * MAX_SPEED, ACCELERATION if ground else AIR_ACCELERATION)
