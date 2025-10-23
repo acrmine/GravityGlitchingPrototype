@@ -56,7 +56,7 @@ func _physics_process(delta: float) -> void:
 	if in_air_animation && !animated_sprite.is_playing():
 		in_air_animation = false
 
-	if !in_air_animation:
+	if !in_air:
 		if direction == 0:
 			animated_sprite.play("idle")
 		else:
