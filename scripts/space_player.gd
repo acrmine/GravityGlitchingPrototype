@@ -19,12 +19,12 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("grav_down"):
 		up_direction = -up_direction
 	if Input.is_action_just_pressed("grav_left"):
-		up_direction = up_direction.rotated(deg_to_rad(90))
+		up_direction = -up_direction.orthogonal()
 	if Input.is_action_just_pressed("grav_right"):
-		up_direction = up_direction.rotated(deg_to_rad(-90))
+		up_direction = up_direction.orthogonal()
 
 	var down_direction = -up_direction
-	var right_direction = up_direction.rotated(deg_to_rad(90))
+	var right_direction = -up_direction.orthogonal()
 
 	# Get input direction: -1, 0, 1 (-1 when left, 1 when right)
 	var direction := Input.get_axis("move_left", "move_right")
@@ -46,11 +46,9 @@ func _physics_process(delta: float) -> void:
 		velocity += down_direction * PLAYER_GRAVITY * delta
 
 	# Horizontal Movement
-	var ground = is_on_floor() || (in_air && in_air_animation)
-	if down_direction.y > 0.000001 || down_direction.y < -0.000001:
-		velocity.x = move_toward(velocity.x, right_direction.x * direction * MAX_SPEED, ACCELERATION if ground else AIR_ACCELERATION)
-	else:
-		velocity.y = move_toward(velocity.y, right_direction.y * direction * MAX_SPEED, ACCELERATION if ground else AIR_ACCELERATION)
+	var target_velocity = right_direction * direction * MAX_SPEED
+	var acceleration = ACCELERATION if is_on_floor() || (in_air && in_air_animation) else AIR_ACCELERATION
+	velocity = velocity.project(right_direction).move_toward(target_velocity, acceleration) + velocity.slide(right_direction)
 
 	# Ground Animations
 	if in_air_animation && !animated_sprite.is_playing():
@@ -72,7 +70,7 @@ func _physics_process(delta: float) -> void:
 	rotation = rotate_toward(
 		rotation,
 		right_direction.angle(),
-		ROTATION_SPEED * delta
+		ROTATION_SPEED * delta,
 	)
 
 	move_and_slide()
