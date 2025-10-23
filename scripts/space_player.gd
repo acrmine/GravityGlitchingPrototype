@@ -14,6 +14,7 @@ const ROTATION_SPEED = 10.0
 @onready var gravCountdown: Label = $Camera2D/UI/GravCountdownNotif
 
 class GravityHandler:
+	# time_before_switch in seconds, change it to change timer
 	var time_before_switch: float = 10.0
 	var elapsed_cntdwn: float = time_before_switch
 	var randGravDirection: int = 0
@@ -29,6 +30,7 @@ class GravityHandler:
 		cntdwnlbltoppos = cntdwnLbl.position
 		cntdwnlblbotpos = cntdwnLbl.position
 		cntdwnlblbotpos.y += 200
+		toggleGravCntdwn()
 
 	func rotate_right():
 		player.up_direction = player.up_direction.orthogonal()
@@ -46,7 +48,7 @@ class GravityHandler:
 		else:
 			var tween = cntdwnLbl.create_tween()
 			tween.tween_property(cntdwnLbl, "position", cntdwnlbltoppos, 1.0)
-			tween.set_ease(Tween.EASE_OUT)
+			tween.set_ease(Tween.EASE_IN)
 			countPresent = true
 	
 	func updtUsrInptGrav():
@@ -66,7 +68,7 @@ class GravityHandler:
 				randGravDirection = randi_range(0, 2)
 			cntdwnLbl.text = str(int(elapsed_cntdwn))
 		
-		if elapsed_cntdwn < 0:
+		if elapsed_cntdwn <= 0:
 			if countPresent:
 				toggleGravCntdwn()
 			elapsed_cntdwn = time_before_switch
@@ -81,7 +83,10 @@ class GravityHandler:
 
 var in_air: bool = false
 var in_air_animation: bool = false
-var grav_handler: GravityHandler = GravityHandler.new(player, gravCountdown)
+var grav_handler: GravityHandler
+
+func _ready() -> void:
+	grav_handler = GravityHandler.new(player, gravCountdown)
 
 func _physics_process(delta: float) -> void:
 	grav_handler.updtGravTimer(delta)
