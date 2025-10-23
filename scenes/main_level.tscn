@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=4 uid="uid://dyop550uv56rb"]
+[gd_scene load_steps=7 format=4 uid="uid://dyop550uv56rb"]
 
 [ext_resource type="PackedScene" uid="uid://q3w22mowpnt" path="res://scenes/space_player.tscn" id="2_6we3w"]
 [ext_resource type="Texture2D" uid="uid://coqloabvbcc1u" path="res://assets/moonTiles/MoonSandTilesSheet.png" id="2_ufxs0"]
+[ext_resource type="Script" uid="uid://bwm346h3k12nf" path="res://scripts/death_boxes.gd" id="3_6we3w"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6we3w"]
 texture = ExtResource("2_ufxs0")
@@ -74,6 +75,21 @@ tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_6we3w")
 
+[sub_resource type="GDScript" id="GDScript_ufxs0"]
+script/source = "extends CollisionPolygon2D
+
+@onready var player := $\"../SpacePlayer\"
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(_delta: float) -> void:
+	pass
+"
+
 [node name="MainLevel" type="Node2D"]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
@@ -82,3 +98,13 @@ tile_set = SubResource("TileSet_qmak7")
 
 [node name="SpacePlayer" parent="." instance=ExtResource("2_6we3w")]
 position = Vector2(0, -23)
+
+[node name="DeathBoxes" type="Area2D" parent="."]
+script = ExtResource("3_6we3w")
+
+[node name="DeathBox" type="CollisionPolygon2D" parent="DeathBoxes"]
+position = Vector2(82, -201)
+polygon = PackedVector2Array(-1785, -1041, 1652, -1068, 1683.0894, 1025.7793, -1635.9106, 1025.7793, -1671, -1172, -1428, -1189, -1386.9106, 782.77936, 1400.0894, 786.77936, 1407.0894, -858.22064, -1765, -829)
+script = SubResource("GDScript_ufxs0")
+
+[connection signal="body_entered" from="DeathBoxes" to="SpacePlayer" method="_on_death_boxes_body_entered"]

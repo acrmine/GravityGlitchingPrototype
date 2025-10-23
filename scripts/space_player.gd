@@ -12,6 +12,8 @@ const ROTATION_SPEED = 10.0
 @onready var camera: Camera2D = $Camera2D
 @onready var player: CharacterBody2D = $"."
 @onready var gravCountdown: Label = $Camera2D/UI/GravCountdownNotif
+@onready var deathbox: Area2D = $"../DeathBoxes"
+@onready var deathsound := $WhiteNoiseDeath
 
 class GravityHandler:
 	# time_before_switch in seconds, change it to change timer
@@ -79,14 +81,16 @@ class GravityHandler:
 					flip()
 				2:
 					rotate_right()
-
+	
 
 var in_air: bool = false
 var in_air_animation: bool = false
+var dying: bool = false
 var grav_handler: GravityHandler
 
 func _ready() -> void:
 	grav_handler = GravityHandler.new(player, gravCountdown)
+	
 
 func _physics_process(delta: float) -> void:
 	grav_handler.updtGravTimer(delta)
@@ -140,5 +144,21 @@ func _physics_process(delta: float) -> void:
 		right_direction.angle(),
 		ROTATION_SPEED * delta,
 	)
-
+	deathchecker(delta)
 	move_and_slide()
+
+var deathcntdwn = 5.0
+
+func deathchecker(delta: float) -> void:
+	if dying:
+		if !deathsound.playing:
+			deathsound.play()
+		deathsound.volume_db += delta * 6.0
+		deathcntdwn -= delta
+		if deathcntdwn <= 0:
+			get_tree().quit()
+
+
+func _on_death_boxes_body_entered(body: Node2D) -> void:
+	if(body.name == "SpacePlayer"):
+		body.dying = true
