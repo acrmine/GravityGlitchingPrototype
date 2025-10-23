@@ -82,9 +82,3 @@ tile_set = SubResource("TileSet_qmak7")
 
 [node name="SpacePlayer" parent="." instance=ExtResource("2_6we3w")]
 position = Vector2(0, -23)
-
-[node name="Camera2D" type="Camera2D" parent="SpacePlayer"]
-ignore_rotation = false
-zoom = Vector2(2, 2)
-position_smoothing_enabled = true
-rotation_smoothing_enabled = true

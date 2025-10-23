@@ -10,19 +10,82 @@ const ROTATION_SPEED = 10.0
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var camera: Camera2D = $Camera2D
+@onready var player: CharacterBody2D = $"."
+@onready var gravCountdown: Label = $Camera2D/UI/GravCountdownNotif
+
+class GravityHandler:
+	var time_before_switch: float = 10.0
+	var elapsed_cntdwn: float = time_before_switch
+	var randGravDirection: int = 0
+	var countPresent: bool = true
+	var player: CharacterBody2D
+	var cntdwnLbl: Label
+	var cntdwnlbltoppos: Vector2
+	var cntdwnlblbotpos: Vector2
+
+	func _init(playerRef: CharacterBody2D, cntdwnLblRef: Label) -> void:
+		player = playerRef
+		cntdwnLbl = cntdwnLblRef
+		cntdwnlbltoppos = cntdwnLbl.position
+		cntdwnlblbotpos = cntdwnLbl.position
+		cntdwnlblbotpos.y += 200
+
+	func rotate_right():
+		player.up_direction = player.up_direction.orthogonal()
+	
+	func rotate_left():
+		player.up_direction = -player.up_direction.orthogonal()
+	
+	func flip():
+		player.up_direction = -player.up_direction
+	
+	func toggleGravCntdwn():
+		if countPresent:
+			cntdwnLbl.position = cntdwnlblbotpos
+			countPresent = false
+		else:
+			var tween = cntdwnLbl.create_tween()
+			tween.tween_property(cntdwnLbl, "position", cntdwnlbltoppos, 1.0)
+			tween.set_ease(Tween.EASE_OUT)
+			countPresent = true
+	
+	func updtUsrInptGrav():
+		if Input.is_action_just_pressed("grav_down"):
+			flip()
+		if Input.is_action_just_pressed("grav_left"):
+			rotate_left()
+		if Input.is_action_just_pressed("grav_right"):
+			rotate_right()
+	
+	func updtGravTimer(frame_delta: float):
+		elapsed_cntdwn -= frame_delta
+		
+		if(elapsed_cntdwn < 6.0):
+			if !countPresent:
+				toggleGravCntdwn()
+				randGravDirection = randi_range(0, 2)
+			cntdwnLbl.text = str(int(elapsed_cntdwn))
+		
+		if elapsed_cntdwn < 0:
+			if countPresent:
+				toggleGravCntdwn()
+			elapsed_cntdwn = time_before_switch
+			match randGravDirection:
+				0:
+					rotate_left()
+				1:
+					flip()
+				2:
+					rotate_right()
+
 
 var in_air: bool = false
 var in_air_animation: bool = false
+var grav_handler: GravityHandler = GravityHandler.new(player, gravCountdown)
 
 func _physics_process(delta: float) -> void:
-	# :DEBUG: change gravity with j/l or k to flip, will be hooked to random timer later
-	if Input.is_action_just_pressed("grav_down"):
-		up_direction = -up_direction
-	if Input.is_action_just_pressed("grav_left"):
-		up_direction = -up_direction.orthogonal()
-	if Input.is_action_just_pressed("grav_right"):
-		up_direction = up_direction.orthogonal()
-
+	grav_handler.updtGravTimer(delta)
+	
 	var down_direction = -up_direction
 	var right_direction = -up_direction.orthogonal()
 
