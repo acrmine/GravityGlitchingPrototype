@@ -219,6 +219,14 @@ text = "Count"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="ModeLabel" type="Label" parent="Camera2D/UI"]
+offset_left = 17.0
+offset_top = 12.0
+offset_right = 158.0
+offset_bottom = 86.0
+theme_override_font_sizes/font_size = 24
+text = "Mode: None (press m to change it)"
+
 [node name="WhiteNoiseDeath" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("7_osv2l")
 volume_db = 5.0
