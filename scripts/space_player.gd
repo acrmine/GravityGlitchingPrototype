@@ -93,7 +93,11 @@ func _ready() -> void:
 	
 
 func _physics_process(delta: float) -> void:
-	grav_handler.updtGravTimer(delta)
+	if !dying:
+		grav_handler.updtGravTimer(delta)
+	else:
+		if grav_handler.countPresent:
+			grav_handler.toggleGravCntdwn()
 	
 	var down_direction = -up_direction
 	var right_direction = -up_direction.orthogonal()
