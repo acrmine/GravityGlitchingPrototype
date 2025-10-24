@@ -126,6 +126,7 @@ class GravityHandler:
 				grav_mode = "None"
 			else:
 				grav_mode = "Timer"
+				
 			mode_label.text = "Mode: " + grav_mode + " (press m to change it)"
 		
 		if grav_mode == "Timer":
