@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://q3w22mowpnt" path="res://scenes/space_player.tscn" id="2_6we3w"]
 [ext_resource type="Texture2D" uid="uid://coqloabvbcc1u" path="res://assets/moonTiles/MoonSandTilesSheet.png" id="2_ufxs0"]
-[ext_resource type="Script" uid="uid://bwm346h3k12nf" path="res://scripts/death_boxes.gd" id="3_6we3w"]
+[ext_resource type="Script" path="res://scripts/death_boxes.gd" id="3_6we3w"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6we3w"]
 texture = ExtResource("2_ufxs0")
@@ -78,7 +78,7 @@ sources/0 = SubResource("TileSetAtlasSource_6we3w")
 [sub_resource type="GDScript" id="GDScript_ufxs0"]
 script/source = "extends CollisionPolygon2D
 
-@onready var player := $\"../SpacePlayer\"
+@onready var player := $\"../../SpacePlayer\"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
